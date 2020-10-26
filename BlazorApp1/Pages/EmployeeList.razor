@@ -1,0 +1,22 @@
+﻿@page "/employees"
+
+@inherits EmployeeListBase
+
+<h3>All Employee List</h3>
+
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Salary</th>
+    </tr>
+    
+    @foreach (var item in Employees)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Salary</td>
+        </tr>
+    }
+</table>
