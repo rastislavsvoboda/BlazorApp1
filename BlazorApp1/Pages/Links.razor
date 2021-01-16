@@ -1,0 +1,81 @@
+﻿@page "/Data/Links"
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+@using BlazorApp1.Models;
+
+@inject ILinkData _db
+
+<h1>Links Page</h1>
+
+<h4>Insert New Link</h4>
+<EditForm Model="@newLink" OnValidSubmit="@InsertLinkAsync">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <InputText id="url" @bind-Value="@newLink.Url"></InputText>
+    <InputText id="name" @bind-Value="@newLink.Name"></InputText>
+    <InputText id="description" @bind-Value="@newLink.Description"></InputText>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+<h4>Current Links</h4>
+
+@if (links == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{   
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Url</th>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var link in links)
+        {
+            <tr>
+                <td>@link.Id</td>
+                <td>@link.Url</td>
+                <td>@link.Name</td>
+                <td>@link.Description</td>
+            </tr>
+        }
+        </tbody>
+   
+    </table>
+}
+
+@code {
+
+    private List<LinkModel> links;
+    private DisplayLinkModel newLink = new DisplayLinkModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        links = (await _db.GetLinks()).ToList();
+    }
+
+    private async Task InsertLinkAsync()
+    {
+        var link = new LinkModel()
+        {
+            Url = newLink.Url,
+            Name = newLink.Name,
+            Description = newLink.Description
+
+        };
+
+        await _db.InsertLink(link);
+
+        links.Add(link);
+
+        newLink = new DisplayLinkModel();
+    }
+}

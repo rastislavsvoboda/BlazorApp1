@@ -35,8 +35,9 @@ namespace BlazorApp1
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddTransient<ISqlDataAccess, SqlDataAccess>();
+            services.AddTransient<ISqlDataAccess, PostgresDataAccess>();
             services.AddTransient<IPeopleData, PeopleData>();
+            services.AddTransient<ILinkData, LinkData>();
 
             services.AddHttpClient<IEmployeeService, EmployeeService>(client => {
 
